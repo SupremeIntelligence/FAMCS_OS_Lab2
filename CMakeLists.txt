@@ -9,10 +9,16 @@ if (POLICY CMP0141)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
-project ("OS_Lab2")
+project (OS_Lab2)
+
+add_subdirectory(Threads)
 
 # Добавьте источник в исполняемый файл этого проекта.
-add_executable (OS_Lab2 "main.cpp" )
+add_executable (OS_Lab2 "main.cpp")
+
+target_include_directories(OS_Lab2 PUBLIC include)
+target_include_directories(Threads PUBLIC include)
+target_link_libraries (OS_Lab2 PUBLIC Threads)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET OS_Lab2 PROPERTY CXX_STANDARD 20)
