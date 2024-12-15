@@ -13,7 +13,7 @@ struct ThreadData
 	int minVal, maxVal;
 	double average;
 
-	ThreadData(int size) : arr(size), minVal(0), maxVal(0), average(0.0) {};
+	ThreadData(int size) : arr(size), minVal(-1), maxVal(-1), average(0.0) {};
 };
 
 DWORD WINAPI min_max(LPVOID lpParameter)
@@ -29,11 +29,20 @@ DWORD WINAPI min_max(LPVOID lpParameter)
 
 		Sleep(7);
 	}
+	cout << "Min array element: \t" << data->minVal << "\nMax array element:\t" << data->maxVal << endl;
 	return 0;
 }
 
 DWORD WINAPI average(LPVOID lpParameter)
 {
+	ThreadData* data = static_cast<ThreadData*>(lpParameter);
+
+	for (int i = 0; i < data->arr.size(); i++)
+	{
+		data->average += data->arr[i];
+		Sleep(12);
+	}
+	cout << "Average value of array elements:\t" << data->average << endl;
 	return 0;
 }
 
@@ -62,26 +71,25 @@ int main()
 	}
 	else
 	{
-		cout << "Thread MinMax created\n";
+		cout << "\n/// Thread MinMax created ///\n\n";
 	}
+	WaitForSingleObject(hMinMax, INFINITE);
+	CloseHandle(hMinMax);
 
 	hAverage = CreateThread(NULL, 0, average, data, 0, &IDAverage);
-	if (hMinMax == nullptr)
+	if (hAverage == nullptr)
 	{
 		cout << "Error generating thread Avreage\n";
 		return GetLastError();
 	}
 	else
 	{
-		cout << "Thread Average created\n";
+		cout << "\n/// Thread Average created ///\n\n";
 	}
 
-	WaitForSingleObject(hMinMax, INFINITE);
 	WaitForSingleObject(hAverage, INFINITE);
+	CloseHandle(hAverage);	
+	
 
-
-	CloseHandle(hMinMax);
-	CloseHandle(hAverage);
-	cout << "Min array element: \t" << data->minVal << "\nMax array element:\t" << data->maxVal << endl;
 	return 0;
 }
