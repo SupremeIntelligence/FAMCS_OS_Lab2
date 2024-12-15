@@ -11,7 +11,11 @@ endif()
 
 project (OS_Lab2)
 
+enable_testing()
+
 add_subdirectory(Threads)
+add_subdirectory(tests)
+add_subdirectory(googletest)
 
 # Добавьте источник в исполняемый файл этого проекта.
 add_executable (OS_Lab2 "main.cpp")
